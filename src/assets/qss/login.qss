@@ -1,0 +1,35 @@
+QLineEdit {
+    border-radius: 4px;
+    border: 1px outset white;
+    min-height: 1.32em;
+    font: 16px;
+    padding: 4px;
+}
+
+QLineEdit:focus {
+    border: 1px outset rgb(124, 220, 254);
+}
+
+QLabel {
+    font: 18px;
+    color: white;
+}
+
+QLabel#RailwaySystemNoAccount {
+    font: 14px;
+    color: azure;
+    text-decoration: underline;
+}
+
+QPushButton {
+    background-color: beige;
+    font: 16px;
+    color: rgb(60, 60, 60);
+    min-width: 10em;
+    padding: 6px;
+}
+
+QPushButton:pressed {
+    background-color: cadetblue;
+    border-style: inset;
+}
