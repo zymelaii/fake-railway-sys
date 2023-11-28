@@ -11,7 +11,7 @@ add_executable(
 
 target_link_libraries(
     ${PROJECT_NAME}
-    PRIVATE Qt6::Core Qt6::Widgets
+    PRIVATE Qt6::Core Qt6::Widgets Qt6::Sql
 )
 
 target_include_directories(

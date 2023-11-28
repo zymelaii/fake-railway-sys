@@ -6,7 +6,7 @@
 #include <QGridLayout>
 #include <QTimer>
 
-#include "PopupMessage.h"
+#include "popupmessage.h"
 
 void PopupMessage::spawn(const QString &msg, QWidget *parent) {
     auto popup = new PopupMessage(msg, parent);
@@ -22,29 +22,27 @@ PopupMessage::PopupMessage(const QString &msg, QWidget *parent)
     setFixedSize(parent->size());
     move(0, 20);
 
-    setStyleSheet(R"(
-        #MessagePane {
-            background-color: rgb(60, 60, 60);
-            border-radius: 4px;
-        }
-        QLabel {
-            font: 12px;
-            color: azure;
-        }
-    )");
-
-    QMargins margins(10, 6, 10, 6);
+    QMargins   margins(10, 6, 10, 6);
+    const auto w        = width() / 2;
+    const auto maxWidth = w - (margins.left() + margins.right());
 
     auto pane = new QWidget(this);
-    pane->setObjectName("MessagePane");
-    pane->setMaximumWidth(width() / 2);
+    pane->setMaximumWidth(w);
+    pane->setStyleSheet(R"(
+        background-color: rgb(60, 60, 60);
+        border-radius: 4px;
+    )");
 
-    auto label    = new QLabel(msg, pane);
-    auto maxWidth = pane->maximumWidth() - (margins.left() + margins.right());
+    //! NOTE: set style sheet before adjustSize to get the concrete width
+    auto label = new QLabel(msg, pane);
+    label->setStyleSheet(R"(
+        font: 12px;
+        color: azure;
+    )");
     label->adjustSize();
-    label->setAlignment(Qt::AlignCenter);
     label->setFixedWidth(qMin(label->width(), maxWidth));
     label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
+    label->setAlignment(Qt::AlignCenter);
     label->setWordWrap(true);
 
     auto layoutPane = new QGridLayout(pane);
