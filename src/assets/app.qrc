@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>common/background.png</file>
         <file>qss/login.qss</file>
+        <file>sql/schema.sql</file>
     </qresource>
 </RCC>

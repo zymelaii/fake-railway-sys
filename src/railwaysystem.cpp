@@ -1,19 +1,10 @@
-#include <QLabel>
-#include <QPushButton>
-#include <QLineEdit>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QGraphicsBlurEffect>
-#include <QPainter>
-#include <QEvent>
-#include <QMouseEvent>
 #include <QFile>
-#include <QDialog>
-#include <QTimer>
+#include <QMouseEvent>
 
 #include "ui/railwaysystem.h"
 #include "railwaysystem.h"
 #include "popupmessage.h"
+#include "dbmanager.h"
 
 class RailwaySystemPrivate {};
 
@@ -98,8 +89,14 @@ void RailwaySystem::submitLoginForm() {
     const auto &password = ui->inputPassword->text();
     if (username.isEmpty()) {
         PopupMessage::spawn("username is empty", this);
+        return;
     } else if (password.isEmpty()) {
         PopupMessage::spawn("password is empty", this);
+        return;
+    }
+    auto exists = DBManager::getInstance().validateOrCreateAccount(username, password, true);
+    if (!exists) {
+        PopupMessage::spawn("username or password is wrong", this);
     } else {
         PopupMessage::spawn("not implemented yet", this);
     }
@@ -111,12 +108,19 @@ void RailwaySystem::submitRegisterForm() {
     const auto &verify   = ui->inputPasswordVerify->text();
     if (username.isEmpty()) {
         PopupMessage::spawn("username is empty", this);
+        return;
     } else if (password.length() < 8) {
         PopupMessage::spawn("password is less than 8 characters", this);
+        return;
     } else if (password != verify) {
         PopupMessage::spawn("passwords do not match", this);
-    } else {
-        PopupMessage::spawn("account registration successful", this);
-        switchToLoginStage();
+        return;
     }
+    auto ok = DBManager::getInstance().validateOrCreateAccount(username, password, false);
+    if (!ok) {
+        PopupMessage::spawn("account alreay exists", this);
+        return;
+    }
+    PopupMessage::spawn("account registration successful", this);
+    switchToLoginStage();
 }
