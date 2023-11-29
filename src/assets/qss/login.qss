@@ -15,7 +15,7 @@ QLabel {
     color: white;
 }
 
-#RailwaySystemNoAccount, #RailwaySystemBack {
+#RailwaySystemHintLinkContainer QLabel {
     font: 14px;
     color: azure;
     text-decoration: underline;

@@ -58,6 +58,37 @@ bool DBManager::validateOrCreateAccount(const QString &username, const QString &
     return true;
 }
 
+bool DBManager::execSqlSource(const QString &path) {
+    auto success = true;
+    if (!db_.isOpen()) { return false; }
+
+    QFile sqlFile(path);
+    auto  ok = sqlFile.open(QFile::ReadOnly | QFile::Text);
+    if (!ok) { return false; }
+    QTextStream stream(&sqlFile);
+    auto        sql = stream.readAll();
+    sqlFile.close();
+
+    ok = db_.transaction();
+    if (!ok) { return false; }
+    auto      sqlList = sql.split(";", Qt::SkipEmptyParts);
+    QSqlQuery query;
+    for (const auto &sqlItem : sqlList) {
+        auto sql = sqlItem.trimmed();
+        if (sql.isEmpty()) { continue; }
+        sql.append(';');
+        ok = query.exec(sql);
+        if (!ok) {
+            success = false;
+            db_.rollback();
+        }
+    }
+    ok = db_.commit();
+    if (!ok) { return false; }
+
+    return success;
+}
+
 bool DBManager::checkOrCreateDatabase() const {
     auto path = dbpath();
     QDir().mkpath(QFileInfo(path).absolutePath());
@@ -72,25 +103,6 @@ bool DBManager::checkOrCreateDatabase() const {
 }
 
 void DBManager::setupDatabase() {
-    Q_ASSERT(db_.isOpen());
-
-    QFile sqlFile(":/sql/schema.sql");
-    auto  ok = sqlFile.open(QFile::ReadOnly | QFile::Text);
-    Q_ASSERT(ok);
-    QTextStream stream(&sqlFile);
-    auto        sql = stream.readAll();
-    sqlFile.close();
-
-    ok = db_.transaction();
-    Q_ASSERT(ok);
-    auto      sqlList = sql.split(";", Qt::SkipEmptyParts);
-    QSqlQuery query;
-    for (const auto &sqlItem : sqlList) {
-        auto sql = sqlItem.trimmed();
-        if (sql.isEmpty()) { continue; }
-        sql.append(';');
-        query.exec(sql);
-    }
-    ok = db_.commit();
+    auto ok = execSqlSource(":/sql/schema.sql");
     Q_ASSERT(ok);
 }

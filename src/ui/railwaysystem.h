@@ -17,6 +17,7 @@ public:
     QLabel      *lbPasswordInput;
     QLabel      *lbNoAccount;
     QLabel      *lbBack;
+    QWidget     *hintLinkContainer;
     QLineEdit   *inputUsername;
     QLineEdit   *inputPassword;
     QLineEdit   *inputPasswordVerify;
@@ -27,6 +28,7 @@ public:
     QGridLayout *layout;
     QHBoxLayout *layoutBackground;
     QVBoxLayout *layoutContainer;
+    QHBoxLayout *layoutHintLink;
 
     void setupUi(QWidget *railwaySystem) {
         if (railwaySystem->objectName().isEmpty()) { railwaySystem->setObjectName("RailwaySystem"); }
@@ -37,8 +39,9 @@ public:
         spacer              = new QLabel(background);
         lbUsernameInput     = new QLabel("Username", container);
         lbPasswordInput     = new QLabel("Password", container);
-        lbNoAccount         = new QLabel("No Account", container);
-        lbBack              = new QLabel("Back", container);
+        hintLinkContainer   = new QWidget(container);
+        lbNoAccount         = new QLabel("No Account", hintLinkContainer);
+        lbBack              = new QLabel("Back", hintLinkContainer);
         inputUsername       = new QLineEdit(container);
         inputPassword       = new QLineEdit(container);
         inputPasswordVerify = new QLineEdit(container);
@@ -60,11 +63,15 @@ public:
         layoutContainer->addWidget(lbPasswordInput);
         layoutContainer->addWidget(inputPassword);
         layoutContainer->addWidget(inputPasswordVerify);
-        layoutContainer->addWidget(lbNoAccount);
-        layoutContainer->addWidget(lbBack);
+        layoutContainer->addWidget(hintLinkContainer);
         layoutContainer->addWidget(btLogin);
         layoutContainer->addWidget(btRegister);
         layoutContainer->addStretch();
+
+        layoutHintLink = new QHBoxLayout(hintLinkContainer);
+        layoutHintLink->addStretch();
+        layoutHintLink->addWidget(lbNoAccount);
+        layoutHintLink->addWidget(lbBack);
 
         //! property
         background->setPixmap(QPixmap(":/common/background.png"));
@@ -89,10 +96,11 @@ public:
         inputPasswordVerify->setEchoMode(QLineEdit::Password);
         inputPasswordVerify->hide();
 
-        lbNoAccount->setObjectName("RailwaySystemNoAccount");
+        hintLinkContainer->setContentsMargins({});
+        hintLinkContainer->setObjectName("RailwaySystemHintLinkContainer");
+
         lbNoAccount->setAlignment(Qt::AlignRight);
 
-        lbBack->setObjectName("RailwaySystemBack");
         lbBack->setAlignment(Qt::AlignRight);
         lbBack->hide();
 
@@ -102,6 +110,8 @@ public:
 
         layoutBackground->setSpacing(0);
         layoutBackground->setContentsMargins(w / 16, 0, w / 16, 0);
+
+        layoutHintLink->setContentsMargins({});
     }
 };
 

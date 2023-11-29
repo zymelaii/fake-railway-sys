@@ -15,6 +15,7 @@ public:
 
     QString dbpath() const;
     bool    validateOrCreateAccount(const QString &username, const QString &password, bool validateOnly);
+    bool    execSqlSource(const QString &path);
 
 private:
     bool checkOrCreateDatabase() const;
