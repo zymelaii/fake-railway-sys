@@ -15,7 +15,7 @@ QLabel {
     color: white;
 }
 
-#RailwaySystemHintLinkContainer QLabel {
+#HintLinkContainer QLabel {
     font: 14px;
     color: azure;
     text-decoration: underline;
@@ -32,4 +32,8 @@ QPushButton {
 QPushButton:pressed {
     background-color: cadetblue;
     border-style: inset;
+}
+
+QPushButton:focus {
+    outline: none;
 }

@@ -1,0 +1,62 @@
+QLineEdit {
+    border-radius: 4px;
+    border: 1px outset white;
+    min-height: 1.32em;
+    font: 16px;
+    padding: 4px;
+}
+
+QLineEdit:focus {
+    border: 1px outset rgb(124, 220, 254);
+}
+
+QPushButton {
+    min-height: 1.32em;
+    border: none;
+    font: 16px;
+    padding: 4px;
+    color: white;
+    background-color: rgb(124, 220, 254);
+}
+
+QPushButton:hover {
+    background-color: rgb(115, 204, 237);
+}
+
+QPushButton:hover:pressed {
+    background-color: cadetblue;
+}
+
+QPushButton:focus {
+    outline: none;
+}
+
+QPushButton#SwapButton {
+    width: 1.32em;
+    height: 1.32em;
+    border-radius: 0.7em;
+    color: black;
+    background: transparent;
+}
+
+QPushButton#SwapButton:hover {
+    background: rgb(173, 215, 231);
+}
+
+QPushButton#SwapButton:hover:pressed {
+    color: azure;
+    background: rgb(121, 168, 186);
+}
+
+QPushButton#QueryButton {
+    color: rgb(58, 28, 28);
+    background-color: lightgreen;
+}
+
+QPushButton#QueryButton:hover {
+    background-color: rgb(129, 216, 129);
+}
+
+QPushButton#QueryButton:hover:pressed {
+    background-color: rgb(113, 194, 113);
+}

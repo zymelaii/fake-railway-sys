@@ -10,7 +10,7 @@
 
 namespace Ui {
 
-class RailwaySystem {
+class LoginPage {
 public:
     QLabel      *background;
     QLabel      *lbUsernameInput;
@@ -30,11 +30,11 @@ public:
     QVBoxLayout *layoutContainer;
     QHBoxLayout *layoutHintLink;
 
-    void setupUi(QWidget *railwaySystem) {
-        if (railwaySystem->objectName().isEmpty()) { railwaySystem->setObjectName("RailwaySystem"); }
+    void setupUi(QWidget *loginPage) {
+        if (loginPage->objectName().isEmpty()) { loginPage->setObjectName("LoginPage"); }
 
         //! widget
-        background          = new QLabel(railwaySystem);
+        background          = new QLabel(loginPage);
         container           = new QWidget(background);
         spacer              = new QLabel(background);
         lbUsernameInput     = new QLabel("Username", container);
@@ -49,7 +49,7 @@ public:
         btRegister          = new QPushButton("register", container);
 
         //! layout
-        layout = new QGridLayout(railwaySystem);
+        layout = new QGridLayout(loginPage);
         layout->addWidget(background);
 
         layoutBackground = new QHBoxLayout(background);
@@ -78,7 +78,7 @@ public:
         background->setScaledContents(true);
         background->setMinimumSize(640, 400);
 
-        container->setObjectName("RailwaySystemContainer");
+        container->setObjectName("Container");
         container->setAutoFillBackground(true);
         auto pal = container->palette();
         pal.setColor(QPalette::Window, QColor(142, 79, 41, 200));
@@ -97,7 +97,7 @@ public:
         inputPasswordVerify->hide();
 
         hintLinkContainer->setContentsMargins({});
-        hintLinkContainer->setObjectName("RailwaySystemHintLinkContainer");
+        hintLinkContainer->setObjectName("HintLinkContainer");
 
         lbNoAccount->setAlignment(Qt::AlignRight);
 

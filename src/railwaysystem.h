@@ -2,10 +2,6 @@
 
 #include <QWidget>
 
-namespace Ui {
-class RailwaySystem;
-}; // namespace Ui
-
 class RailwaySystemPrivate;
 
 class RailwaySystem : public QWidget {
@@ -15,17 +11,29 @@ public:
     explicit RailwaySystem(QWidget *parent = nullptr);
     ~RailwaySystem();
 
-private:
-    bool eventFilter(QObject *object, QEvent *e) override;
-    void resizeEvent(QResizeEvent *e) override;
+    enum SystemPage {
+        Login,
+        Main,
+        Query,
+        User,
+        Backend,
+    };
+
+    Q_ENUM(SystemPage);
+
+public slots:
+    void switchTo(SystemPage page);
+    void switchToMain();
+    void query(QString from, QString to, QString date);
 
 protected slots:
-    void switchToLoginStage();
-    void switchToRegisterStage();
-    void submitLoginForm();
-    void submitRegisterForm();
+    void gotoBackend();
+    void purchase(QString trainId, int totalTickets);
+    void refund(QString ticketId);
+
+protected:
+    int getCurrentUid();
 
 private:
     RailwaySystemPrivate *d;
-    Ui::RailwaySystem    *ui;
 };

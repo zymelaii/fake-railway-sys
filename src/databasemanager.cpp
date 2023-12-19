@@ -4,14 +4,14 @@
 #include <QDebug>
 #include <memory>
 
-#include "dbmanager.h"
+#include "databasemanager.h"
 
-DBManager &DBManager::getInstance() {
-    static std::unique_ptr<DBManager> DBM_INSTANCE{new DBManager};
+DatabaseManager &DatabaseManager::getInstance() {
+    static std::unique_ptr<DatabaseManager> DBM_INSTANCE{new DatabaseManager};
     return *DBM_INSTANCE.get();
 }
 
-DBManager::DBManager()
+DatabaseManager::DatabaseManager()
     : db_{QSqlDatabase::addDatabase("QSQLITE")} {
     auto shouldInit = checkOrCreateDatabase();
     db_.setDatabaseName(dbpath());
@@ -20,15 +20,15 @@ DBManager::DBManager()
     if (shouldInit) { setupDatabase(); }
 }
 
-DBManager::~DBManager() {
+DatabaseManager::~DatabaseManager() {
     db_.close();
 }
 
-QString DBManager::dbpath() const {
+QString DatabaseManager::dbpath() const {
     return {"data/railway.db"};
 }
 
-bool DBManager::validateOrCreateAccount(const QString &username, const QString &password, bool validateOnly) {
+bool DatabaseManager::validateOrCreateAccount(const QString &username, const QString &password, bool validateOnly) {
     Q_ASSERT(db_.isOpen());
     QSqlQuery query;
     query.prepare("select count(*) from account where username = ? and password = ?;");
@@ -58,7 +58,7 @@ bool DBManager::validateOrCreateAccount(const QString &username, const QString &
     return true;
 }
 
-bool DBManager::execSqlSource(const QString &path) {
+bool DatabaseManager::execSqlSource(const QString &path) {
     auto success = true;
     if (!db_.isOpen()) { return false; }
 
@@ -89,7 +89,7 @@ bool DBManager::execSqlSource(const QString &path) {
     return success;
 }
 
-bool DBManager::checkOrCreateDatabase() const {
+bool DatabaseManager::checkOrCreateDatabase() const {
     auto path = dbpath();
     QDir().mkpath(QFileInfo(path).absolutePath());
     if (!QFile::exists(path)) {
@@ -102,7 +102,17 @@ bool DBManager::checkOrCreateDatabase() const {
     return false;
 }
 
-void DBManager::setupDatabase() {
-    auto ok = execSqlSource(":/sql/schema.sql");
+void DatabaseManager::setupDatabase() {
+    bool ok = false;
+    //! setup tables
+    ok = execSqlSource(":/sql/schema.sql");
     Q_ASSERT(ok);
+    //! import sample records
+    ok = execSqlSource(":/sql/sample.sql");
+    Q_ASSERT(ok);
+}
+
+bool DatabaseManager::execute(QSqlQuery &query, const QString &sql) {
+    if (!db_.isOpen()) { return false; }
+    return query.exec(sql);
 }
